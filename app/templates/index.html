@@ -47,13 +47,13 @@
     </div>
     <section class="container-fluid sms_content">
         <div class="container">
-            {#<div class="sms-number-list-ad sms-number-list">
-                <picture>
+            <div class="sms-number-list-ad sms-number-list">
+                <!--<picture>
                     <source media="(min-width:768px)" srcset="https://static.pdflibr.com/error_info/error_2.png">
                     <source media="(max-width:768px)" srcset="https://static.pdflibr.com/error_info/error_3.png">
                     <img class="img-responsive" src="https://static.pdflibr.com/error_info/error_2.png" align="在线短信接收"/>
-                </picture>
-            </div>#}
+                </picture>-->
+            </div>
             <div class="sms-number-list row show-grid">
                 <div class="number-list-flag col-xs-12 col-sm-12 col-md-4 col-lg-4 margin-3">
                     <picture>
@@ -63,7 +63,7 @@
                                 srcset="{{ url_for('static',filename='images/china-max-768.svg') }}">
                         <img src="{{ url_for('static',filename='images/china-min-768.svg') }}">
                     </picture>
-                    <h3>+8617767832292</h3>
+                    <h3>+8619965412404</h3>
                 </div>
                 <div class="number-list-info col-xs-12 col-sm-12 col-md-4 col-lg-4 margin-3">
                     <p>总共<b>{{ SMS_Count }}</b>条短信内容。</p>

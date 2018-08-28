@@ -24,8 +24,8 @@ def index():
     title = '首 页'
     keyword = '在线短信接收,sms_receive,短信接收,短信验证码接收'
     description = '本平台可以在线接收短信，接收短信验证码，显示迅速，与国外类似短信验证码接收更快捷。'
-    msg_count = db.session.query(sqlalchemy.func.count(SMS_Receive.id)).scalar()
-    last_time = SMS_Receive.query.order_by(SMS_Receive.SMS_ReceiveTime.desc()).first().SMS_ReceiveTime
+    msg_count = db.session.query(sqlalchemy.func.count(SMS_Receive.id)).filter_by(IsShow=True).scalar()
+    last_time = SMS_Receive.query.filter_by(IsShow=True).order_by(SMS_Receive.SMS_ReceiveTime.desc()).first().SMS_ReceiveTime
     start_time = datetime.datetime.now()
     # 计算时差
     ms = (start_time - last_time).seconds
@@ -44,8 +44,7 @@ def index():
     article_list = Article.query.order_by(Article.create_time).all()
 
     return render_template("index.html", name=title, keywords=keyword, description=description,
-                           SMS_Count=msg_count, timeInfo=time_info, current_time=start_time,
-                           article_list=article_list)
+                           SMS_Count=msg_count, timeInfo=time_info, current_time=start_time, article_list=article_list)
 
 
 @main.route('/SMSContent')
