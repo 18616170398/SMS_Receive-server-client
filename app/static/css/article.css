@@ -14,3 +14,10 @@ body {
 img{
     max-width: 100%;
 }
+/*response styles start*/
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 768px) {
+    .container{
+        width: 100%;
+    }
+}

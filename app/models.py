@@ -14,6 +14,25 @@ class SMS_Receive(db.Model):
     Type = db.Column(db.String(32))
     # 是否显示，如果电话号码在黑名单不显示，否则显示
     IsShow = db.Column(db.Boolean, default=True)
+    # 手机号码编号，便于分组
+    PhoneNumber_id = db.Column(db.Integer, db.ForeignKey('phonenumber_list.id'))
+
+
+# Token相关表
+class TokenList(db.Model):
+    __tablename__ = 'tokenlist'
+    id = db.Column(db.Integer, primary_key=True)
+    Token = db.Column(db.String(36))
+    PhoneNumber_id = db.Column(db.Integer, db.ForeignKey('phonenumber_list.id'))
+
+
+# 电话号码表
+class PhoneNumber_List(db.Model):
+    __tablename__ = 'phonenumber_list'
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    PhoneNumber = db.Column(db.String(36))
+    SMS_Receive = db.relationship('SMS_Receive', backref='phonenumber_list')
+    TokenList = db.relationship('TokenList', backref='phonenumber_list')
 
 
 # 电话黑名单

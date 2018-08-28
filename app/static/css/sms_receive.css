@@ -95,7 +95,7 @@ body {
 }
 
 .sms-number-read {
-    padding: 10px 0 0 64px;
+    padding: 10px 0 10px 64px;
 }
 
 .sms-number-read b {
@@ -116,7 +116,6 @@ body {
 
 .sms_content {
     background-color: #4baad3;
-    padding: 3%;
 }
 
 .sms-content-list {

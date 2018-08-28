@@ -4,6 +4,7 @@ import time
 from app import db
 from app.models import SMS_Receive, Article, blacklist
 import sqlalchemy
+from sqlalchemy import and_
 import sqlalchemy.orm
 import sqlalchemy.ext.declarative
 import datetime
@@ -24,11 +25,39 @@ def index():
     title = '首 页'
     keyword = '在线短信接收,sms_receive,短信接收,短信验证码接收'
     description = '本平台可以在线接收短信，接收短信验证码，显示迅速，与国外类似短信验证码接收更快捷。'
-    msg_count = db.session.query(sqlalchemy.func.count(SMS_Receive.id)).filter_by(IsShow=True).scalar()
-    last_time = SMS_Receive.query.filter_by(IsShow=True).order_by(SMS_Receive.SMS_ReceiveTime.desc()).first().SMS_ReceiveTime
+    # 第一个号码
+    msg_count_1 = db.session.query(sqlalchemy.func.count(SMS_Receive.id)).filter(
+        and_(SMS_Receive.IsShow == True, SMS_Receive.PhoneNumber_id == 1)).scalar()
+    last_time_1 = SMS_Receive.query.filter(and_(SMS_Receive.IsShow == True, SMS_Receive.PhoneNumber_id == 1)).order_by(
+        SMS_Receive.SMS_ReceiveTime.desc()).first().SMS_ReceiveTime
+    time_info_1 = time_difference(last_time_1)
+    # 第二个号码
+    msg_count_2 = db.session.query(sqlalchemy.func.count(SMS_Receive.id)).filter(
+        and_(SMS_Receive.IsShow == True, SMS_Receive.PhoneNumber_id == 3)).scalar()
+    last_time_2 = SMS_Receive.query.filter(and_(SMS_Receive.IsShow == True, SMS_Receive.PhoneNumber_id == 3)).order_by(
+        SMS_Receive.SMS_ReceiveTime.desc()).first().SMS_ReceiveTime
+    time_info_2 = time_difference(last_time_2)
+    # 第三个号码
+    msg_count_3 = db.session.query(sqlalchemy.func.count(SMS_Receive.id)).filter(
+        and_(SMS_Receive.IsShow == True, SMS_Receive.PhoneNumber_id == 5)).scalar()
+    last_time_3 = SMS_Receive.query.filter(and_(SMS_Receive.IsShow == True, SMS_Receive.PhoneNumber_id == 5)).order_by(
+        SMS_Receive.SMS_ReceiveTime.desc()).first().SMS_ReceiveTime
+    time_info_3 = time_difference(last_time_3)
+    # 显示文章
+    article_list = Article.query.order_by(Article.create_time).all()
+
+    return render_template("index.html", name=title, keywords=keyword, description=description,
+                           SMS_Count_1=msg_count_1, timeInfo_1=time_info_1, SMS_Count_2=msg_count_2,
+                           timeInfo_2=time_info_2, SMS_Count_3=msg_count_3, timeInfo_3=time_info_3,
+                           current_time=datetime.datetime.now(),
+                           article_list=article_list)
+
+
+# 计算时差
+def time_difference(end_time):
     start_time = datetime.datetime.now()
     # 计算时差
-    ms = (start_time - last_time).seconds
+    ms = (start_time - end_time).seconds
     if ms >= 86400:
         days = ms // 86400
         time_info = '%d天' % (days)
@@ -40,28 +69,27 @@ def index():
         time_info = '%d分钟' % (minute)
     else:
         time_info = '%d秒' % (ms)
-    # 显示文章
-    article_list = Article.query.order_by(Article.create_time).all()
-
-    return render_template("index.html", name=title, keywords=keyword, description=description,
-                           SMS_Count=msg_count, timeInfo=time_info, current_time=start_time, article_list=article_list)
+    return time_info;
 
 
-@main.route('/SMSContent')
-def SMSContent():
+@main.route('/SMSContent/<int:phone_number>')
+def SMSContent(phone_number):
     title = '首 页'
     keyword = '在线短信接收,sms_receive,短信接收,短信验证码接收'
     description = '本平台可以在线接收短信，接收短信验证码，显示迅速，与国外类似短信验证码接收更快捷。'
     # 选择最新4条短信内容
-    font_list_four = SMS_Receive.query.order_by(SMS_Receive.SMS_ReceiveTime.desc()).filter_by(IsShow=True).limit(4)
+    font_list_four = SMS_Receive.query.order_by(SMS_Receive.SMS_ReceiveTime.desc()).filter(
+        and_(SMS_Receive.IsShow == True, SMS_Receive.PhoneNumber_id == phone_number)).limit(4)
     # 如果没有数据，默认显示第一页
     page = request.args.get('page', 1, type=int)
     # 选最剩余短信内容
     pagination = SMS_Receive.query.order_by(SMS_Receive.SMS_ReceiveTime.desc()) \
-        .filter_by(IsShow=True).paginate(page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
+        .filter(and_(SMS_Receive.IsShow == True, SMS_Receive.PhoneNumber_id == phone_number)).paginate(page, per_page=
+    current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
     surplus = pagination.items
     return render_template("sms_content.html", name=title, keywords=keyword, description=description,
-                           list_four=font_list_four, list_surplus=surplus, pagination=pagination)
+                           list_four=font_list_four, list_surplus=surplus, pagination=pagination,
+                           phone_number=phone_number)
 
 
 @main.route('/SMSServer', methods=['POST'])

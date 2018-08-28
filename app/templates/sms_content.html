@@ -1,15 +1,24 @@
 {% extends "sms_base.html" %}
 {% import "_macros.html" as macros %}
 
-{% block description %}{{ "%s" % description }}{% endblock%}
+{% block description %}{{ "%s" % description }}{% endblock %}
 {% block keywords %}{{ "%s" % keywords }}{% endblock %}
 
 {% block title %}短信列表{% endblock %}
 
 {% block content %}
     <section class="container sms-content-ad">
-        <div class="ad">
-            <script src="//grandcapital.cn/my/referral/banner_rotator.js?language=zh-hans&flashSupport=false&width=980&height=120&api_key=dbffe245e9b64f8a365bd5a38b5a276cd9c92c38"></script>
+        <div class="ad_center">
+            <!-- 内容页广告 -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-3001094598236152"
+                 data-ad-slot="5211110995"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
     </section>
 
@@ -32,10 +41,10 @@
                     {% for item in list_four %}
                         <tr>
                             <td>{{ loop.index }}</td>
-                            {% if item.PhoneNumber|length <9 %}
-                                <td>{{ item.PhoneNumber }}</td>
+                            {% if item.phone_number|length <9 %}
+                                <td>{{ item.phone_number }}</td>
                             {% else %}
-                                <td> {{ item.PhoneNumber[:item.PhoneNumber|length - 8]  + '****' + item.PhoneNumber[item.PhoneNumber|length - 4:] }} </td>
+                                <td> {{ item.phone_number[:item.phone_number|length - 8]  + '****' + item.phone_number[item.phone_number|length - 4:] }} </td>
                             {% endif %}
                             <td> {{ item.Content }} </td>
                             <td>
@@ -58,7 +67,7 @@
                  data-ad-format="auto"
                  data-full-width-responsive="true"></ins>
             <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+                (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
         </div>
     </section>
@@ -70,21 +79,21 @@
             <div class="sms-content-table table-responsive">
                 <table class="table table-hover">
                     <thead>
-                        <tr>
-                            <th width="3%"> #</th>
-                            <th width="12%"> 电话号码</th>
-                            <th width="70%"> 短信内容</th>
-                            <th width="15%"> 发送日期</th>
-                        </tr>
+                    <tr>
+                        <th width="3%"> #</th>
+                        <th width="12%"> 电话号码</th>
+                        <th width="70%"> 短信内容</th>
+                        <th width="15%"> 发送日期</th>
+                    </tr>
                     </thead>
                     <tbody>
                     {% for item in list_surplus %}
                         <tr>
                             <td> {{ loop.index }}</td>
-                            {% if item.PhoneNumber|length <9 %}
-                                <td>{{ item.PhoneNumber }}</td>
+                            {% if item.phone_number|length <9 %}
+                                <td>{{ item.phone_number }}</td>
                             {% else %}
-                                <td> {{ item.PhoneNumber[:item.PhoneNumber|length - 8]  + '****' + item.PhoneNumber[item.PhoneNumber|length - 4:] }} </td>
+                                <td> {{ item.phone_number[:item.phone_number|length - 8]  + '****' + item.phone_number[item.phone_number|length - 4:] }} </td>
                             {% endif %}
                             <td> {{ item.Content }} </td>
                             <td>
@@ -99,9 +108,21 @@
 
         <div class="sms-content-pager">
             {% if list_surplus %}
+            {% if phone_number==1 %}
             <div class="pagination">
-                {{ macros.pagination_widget(pagination,'.SMSContent') }}
+                {{ macros.pagination_widget(pagination,'.SMSContent',phone_number=1) }}
             </div>
+            {% endif %}
+                {% if phone_number==3 %}
+            <div class="pagination">
+                {{ macros.pagination_widget(pagination,'.SMSContent',phone_number=3) }}
+            </div>
+            {% endif %}
+                {% if phone_number==5 %}
+            <div class="pagination">
+                {{ macros.pagination_widget(pagination,'.SMSContent',phone_number=5) }}
+            </div>
+            {% endif %}
             {% endif %}
         </div>
     </section>

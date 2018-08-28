@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 import os
 from app import create_app, db
+from app.models import *
 from flask_script import Manager, Shell, Server
 from flask_migrate import Migrate, MigrateCommand
 
@@ -19,7 +20,7 @@ def test():
 
 
 def make_shell_context():
-    return dict(app=app, db=db)
+    return dict(app=app, db=db, SMS_Receive=SMS_Receive, TokenList=TokenList, BlackList=blacklist, Article=Article)
 
 
 manager.add_command("shell", Shell(make_context=make_shell_context))
