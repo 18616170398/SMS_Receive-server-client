@@ -2,7 +2,7 @@
 
 sms_receive flask open souce code.
 
-www.pdflibr.com服务器端。
+www.pdflibr.com 服务器端。
 
 另外一个手机端项目代码在这里：[sms-receive 手机端](https://github.com/sycct/sms-receive-phone-client)
 
